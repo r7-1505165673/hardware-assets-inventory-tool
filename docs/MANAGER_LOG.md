@@ -208,3 +208,51 @@ Current npm advisory observation: 9 vulnerabilities (7 moderate, 2 high).
 Dependency remediation: NOT part of this fix.
 Batch 1 implementation: NOT STARTED.
 Next: ChatGPT Manager re-review of final PR #3 head before merge.
+
+
+## Batch 1 — Controlled fast-uri Security Maintenance
+
+Starting main:
+653a41fa3c1ca4c88e56b4ffa50a5af180e35b99
+
+Goal:
+Update transitive fast-uri security versions.
+
+Dependency changes:
+- fast-uri 3.1.5 → 3.1.7
+- fast-uri 4.1.2 → 4.1.4
+
+Dependency type:
+Transitive / indirect.
+
+Product code:
+Unchanged.
+
+package.json:
+Unchanged.
+
+Fastify:
+Unchanged.
+
+CI workflow:
+Unchanged.
+
+Local differential diagnostic:
+- Clean baseline A itself failed repository format/test commands on Windows.
+- Baseline format check reported 519 files.
+- Baseline npm test reported 343 failed / 139 passed tests.
+- Representative test failures included Windows EPERM temporary-directory cleanup.
+- Modified B fresh npm ci was blocked by Windows EPERM on the rolldown native binding.
+- No evidence from the diagnostic attributes these failures to fast-uri.
+
+Manager decision:
+Proceed to PR under local-validation exception.
+
+Authoritative Batch 1 regression gate:
+Fresh GitHub Actions CI for this PR.
+
+Manager review:
+PENDING.
+
+Batch 2:
+NOT STARTED.
