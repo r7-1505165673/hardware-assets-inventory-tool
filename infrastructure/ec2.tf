@@ -124,7 +124,7 @@ resource "aws_instance" "app" {
     public_ip          = aws_eip.app.public_ip
     # Only behind the load balancer. The application security group admits app
     # traffic from the ALB security group, and these CIDRs name its subnets.
-    trust_proxy_value  = local.domain_enabled ? local.trusted_proxy_cidrs : ""
+    trust_proxy_value = local.domain_enabled ? local.trusted_proxy_cidrs : ""
   })
 
   # The image tag is read by user_data at boot, so a new tag is a new script,

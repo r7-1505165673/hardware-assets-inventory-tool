@@ -171,20 +171,29 @@ describe('rate limiting behind a proxy', () => {
 
   it('uses the right-most client behind a trusted immediate proxy', async () => {
     ctx = await buildTestApp({ TRUST_PROXY: '10.0.0.0/24' });
-    const attempts = await Promise.all(
-      Array.from({ length: 12 }, (_unused, index) =>
-        inject(ctx.app, {
-          method: 'POST',
-          url: '/api/v1/auth/login',
-          remoteAddress: '10.0.0.10',
-          headers: { 'x-forwarded-for': `198.51.100.${index}, 203.0.113.25` },
-          body: { email: 'nobody@acme.io', password: 'wrong-password-here' },
-        }),
-      ),
-    );
+    let last = 0;
+    for (let index = 1; index <= 11; index++) {
+      const res = await inject(ctx.app, {
+        method: 'POST',
+        url: '/api/v1/auth/login',
+        remoteAddress: '10.0.0.10',
+        headers: { 'x-forwarded-for': `198.51.100.${index}, 203.0.113.25` },
+        body: { email: 'nobody@acme.io', password: 'wrong-password-here' },
+      });
+      last = res.statusCode;
+    }
     // Changing attacker-controlled values left of the real client does not
     // create new buckets when only the immediate proxy is trusted.
-    expect(attempts.filter((res) => res.statusCode === 429).length).toBeGreaterThan(0);
+    expect(last).toBe(429);
+
+    const differentClient = await inject(ctx.app, {
+      method: 'POST',
+      url: '/api/v1/auth/login',
+      remoteAddress: '10.0.0.10',
+      headers: { 'x-forwarded-for': '198.51.100.99, 203.0.113.26' },
+      body: { email: 'nobody@acme.io', password: 'wrong-password-here' },
+    });
+    expect(differentClient.statusCode).toBe(401);
   });
 
   it('ignores forwarded addresses from an untrusted immediate peer', async () => {

@@ -392,3 +392,51 @@ Local validation:
 - npm audit: 7 vulnerabilities (6 moderate, 1 high); no Fastify finding remains.
 
 Batch 3: NOT STARTED.
+
+## Batch 2 — Manager Review / Fix 01
+
+PR:
+#5
+
+Reviewed head:
+85e80ed8c4372f8ea1a1f2bcc6ab608783c7415f
+
+CI run:
+34477055283
+
+Manager verdict:
+FIX REQUIRED
+
+Verified PASS:
+
+- application ci
+- api-tests-postgres
+- image
+- Fastify 5.12.3 dependency scope
+- config tests
+- proxy security tests executed successfully on GitHub
+
+Blocking issues:
+
+1. Terraform fmt failure on infrastructure/ec2.tf
+2. stale numeric TRUST_PROXY guidance in .env.example
+3. stale numeric TRUST_PROXY / ALB explanation in infrastructure/README.md
+4. current trusted-proxy test does not yet prove separate buckets for distinct right-most clients
+
+Audit observation:
+7 vulnerabilities
+
+- 6 moderate
+- 1 high
+
+Fastify audit finding:
+not observed in current dependency state
+
+AWS apply:
+NOT PERFORMED
+
+Batch 3:
+NOT STARTED
+
+Next:
+Fix 01 → new pull_request CI → ChatGPT Manager re-review
