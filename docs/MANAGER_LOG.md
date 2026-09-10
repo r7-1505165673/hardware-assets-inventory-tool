@@ -121,3 +121,33 @@ Manager documentation only.
 
 Next:
 ChatGPT Manager re-review.
+
+## Fork CI Gate — Verification Probe
+
+Batch 0: CLOSED / PASS
+
+Starting main:
+`1a1cab930de79983c054686e2c5a710062b7c163`
+
+GitHub Actions on the fork was manually enabled by the repository owner after Batch 0 closure.
+
+Purpose of this PR:
+Trigger the repository's existing `pull_request` CI.
+
+CI workflow configuration:
+Unchanged.
+
+Product code:
+Unchanged.
+
+Dependencies:
+Unchanged.
+
+Batch 1 implementation:
+NOT STARTED.
+
+CI result:
+Not claimed in this commit. The authoritative result must be read from the GitHub Actions run by ChatGPT Manager after the PR is created.
+
+Next:
+ChatGPT independently reviews the PR and its actual GitHub Actions result.
