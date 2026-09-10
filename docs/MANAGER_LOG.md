@@ -102,3 +102,22 @@ Batch 1 implementation:
 NOT STARTED.
 
 The real Manager Review → FIX REQUIRED → Fix → Manager Re-review → PASS → Merge loop occurred before this post-merge sync.
+
+## Batch 0 Post-merge State Sync / Fix 01
+
+PR: #2
+
+Reviewed head:
+`89ce4dc84fc046202df6afa340d1125b52d1379e`
+
+Manager verdict:
+FIX REQUIRED
+
+Finding:
+Stale Batch 0 Fix next-step wording remained in `MANAGER_STATE.md`.
+
+Fix scope:
+Manager documentation only.
+
+Next:
+ChatGPT Manager re-review.

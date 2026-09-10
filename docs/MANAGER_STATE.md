@@ -114,4 +114,4 @@ Next Manager gate: before Batch 1 implementation, independently establish, verif
 - Batch 2 — Fastify security/architecture compatibility challenge
 - Batch 3 — bounded cross-module product change
 
-Next step while this PR is open: ChatGPT Manager re-review of the Batch 0 Fix. After acceptance and merge: prepare for Batch 1, but do not start it automatically.
+Current gate: fork CI verification / Batch 1 preparation before Batch 1 implementation. Batch 1 implementation: NOT STARTED.
