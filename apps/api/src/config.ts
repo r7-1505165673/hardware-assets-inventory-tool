@@ -84,15 +84,18 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
 }
 
 /**
- * `true`, `false`, a hop count, or a comma-separated list of trusted addresses
- * — the shapes Fastify accepts, so an operator can name their proxy's subnet
- * rather than trusting whatever arrives.
+ * `true`, `false`, or a comma-separated list of trusted addresses. Numeric
+ * hop-count trust cannot validate the connecting proxy and is intentionally
+ * rejected; operators should name the proxy address or CIDR instead.
  */
-function readTrustProxy(value: string | undefined): boolean | number | string[] {
+function readTrustProxy(value: string | undefined): boolean | string[] {
   if (value === undefined || value === '' || value === 'false') return false;
   if (value === 'true') return true;
-  const hops = Number(value);
-  if (Number.isInteger(hops) && hops > 0) return hops;
+  if (/^\d+$/.test(value.trim())) {
+    throw new Error(
+      'TRUST_PROXY numeric hop-count trust is no longer supported; use trusted proxy IP/CIDR values instead',
+    );
+  }
   return value.split(',').map((entry) => entry.trim());
 }
 

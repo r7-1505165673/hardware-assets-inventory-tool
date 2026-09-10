@@ -32,6 +32,10 @@ locals {
   # so a wrong value here is not a cosmetic thing: it is an instance where
   # nothing saves, starting with /setup.
   app_url = local.domain_enabled ? "https://${var.domain}" : "http://${aws_eip.app.public_ip}"
+
+  # The ALB nodes live in these subnets. Trust their derived CIDRs rather than
+  # an unverifiable numeric hop count, so custom VPC CIDRs remain supported.
+  trusted_proxy_cidrs = join(",", aws_subnet.public[*].cidr_block)
 }
 
 # Allocated before the instance, because user_data has to be able to name it.
@@ -118,10 +122,9 @@ resource "aws_instance" "app" {
     app_url            = local.app_url
     timezone           = var.timezone
     public_ip          = aws_eip.app.public_ip
-    # Only behind the load balancer. Set on an instance with nothing in front
-    # of it, X-Forwarded-For becomes a header any client writes for itself —
-    # and the sign-in rate limits are keyed on what it says.
-    trust_proxy = local.domain_enabled
+    # Only behind the load balancer. The application security group admits app
+    # traffic from the ALB security group, and these CIDRs name its subnets.
+    trust_proxy_value = local.domain_enabled ? local.trusted_proxy_cidrs : ""
   })
 
   # The image tag is read by user_data at boot, so a new tag is a new script,

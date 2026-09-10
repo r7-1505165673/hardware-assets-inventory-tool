@@ -355,3 +355,164 @@ Merge authorization: PENDING final-state re-review.
 Batch 2: NOT STARTED.
 
 Next: final PR-head CI → ChatGPT Manager final re-review → merge authorization if PASS.
+
+## Batch 2 — Fastify Security / trustProxy Architecture Compatibility
+
+Batch 1: CLOSED / PASS.
+PR: #4
+Authorized final head: 50630a736fddc8971a569eb17a1e58942aac539b
+Merge commit: d57a9a3d44bf401e186233280df32eb11531e75d
+Post-merge main CI: 34473410139 — PASS.
+
+Batch 2 implementation: IN PROGRESS.
+Manager review: PENDING.
+
+Architectural decision:
+
+- Upgrade Fastify to 5.12.3.
+- Reject numeric TRUST_PROXY hop counts.
+- Prefer address/CIDR trust.
+- Document controlled sanitizing-proxy true mode.
+- Derive ALB trusted proxy CIDRs from Terraform public subnet resources.
+- No AWS apply performed.
+
+Local validation:
+
+- npm ci: PASS.
+- API typecheck: PASS.
+- Config tests: 15 passed.
+- Proxy security assertions executed; Windows EPERM cleanup marked the file failed.
+- Lint: PASS.
+- Repository format check: local baseline mismatch persists (511 files reported).
+- Full typecheck: PASS.
+- Full tests: Web 329 passed and Shared 166 passed; API cleanup failures remain Windows EPERM.
+- Build: PASS.
+- E2E: local Windows web-server command cannot run rm.
+- Terraform CLI: unavailable locally; no apply attempted.
+- npm audit: 7 vulnerabilities (6 moderate, 1 high); no Fastify finding remains.
+
+Batch 3: NOT STARTED.
+
+## Batch 2 — Manager Review / Fix 01
+
+PR:
+#5
+
+Reviewed head:
+85e80ed8c4372f8ea1a1f2bcc6ab608783c7415f
+
+CI run:
+34477055283
+
+Manager verdict:
+FIX REQUIRED
+
+Verified PASS:
+
+- application ci
+- api-tests-postgres
+- image
+- Fastify 5.12.3 dependency scope
+- config tests
+- proxy security tests executed successfully on GitHub
+
+Blocking issues:
+
+1. Terraform fmt failure on infrastructure/ec2.tf
+2. stale numeric TRUST_PROXY guidance in .env.example
+3. stale numeric TRUST_PROXY / ALB explanation in infrastructure/README.md
+4. current trusted-proxy test does not yet prove separate buckets for distinct right-most clients
+
+Audit observation:
+7 vulnerabilities
+
+- 6 moderate
+- 1 high
+
+Fastify audit finding:
+not observed in current dependency state
+
+AWS apply:
+NOT PERFORMED
+
+Batch 3:
+NOT STARTED
+
+Next:
+Fix 01 → new pull_request CI → ChatGPT Manager re-review
+
+## Batch 2 — Manager Re-review / Technical PASS
+
+PR:
+#5
+
+Initial implementation head:
+85e80ed8c4372f8ea1a1f2bcc6ab608783c7415f
+
+Fix 01 / technically validated head:
+85dc7b31c321a99d15b85122752a741ccd589981
+
+Initial CI:
+34477055283
+
+Result:
+FIX REQUIRED
+
+Initial blockers:
+
+- Terraform fmt failure
+- stale .env.example numeric guidance
+- stale infrastructure README numeric guidance
+- proxy test proof gap
+
+Successful CI:
+34478773533
+
+Manager technical verdict:
+PASS
+
+All four jobs:
+PASS
+
+Tests:
+
+- API: 489 passed
+- Web: 329 passed
+- Shared: 166 passed
+- Total unit/integration: 984 passed
+- E2E: 49 passed
+- Config: 15 passed
+- Security: 11 passed
+
+Terraform:
+
+- fmt: PASS
+- init: PASS
+- validate: PASS
+
+Audit:
+7 vulnerabilities
+
+- 6 moderate
+- 1 high
+
+Fastify:
+5.12.3
+
+Dependency scope:
+unchanged and bounded
+
+AWS apply:
+NOT PERFORMED
+
+Optional ALB/domain path:
+NOT live-applied
+
+Merge authorization:
+PENDING final-state re-review
+
+Batch 3:
+NOT STARTED
+
+Next:
+final state-sync commit → fresh PR CI → ChatGPT Manager final exact-head re-review → merge authorization if PASS

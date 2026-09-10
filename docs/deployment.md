@@ -49,7 +49,7 @@ services:
       - ./data:/data
     environment:
       APP_URL: https://inventory.example.com
-      TRUST_PROXY: '1'
+      TRUST_PROXY: 'true'
       # The nightly jobs run on wall-clock time, so this decides when 08:00 is.
       TZ: Europe/Berlin
 ```
@@ -77,11 +77,16 @@ Four rules, and the app asks for nothing else.
 
 The default is `http://localhost:3000`, which is right for a laptop and wrong for everything else. A production instance still carrying it prints a warning to stderr on boot naming this variable.
 
-**4. `TRUST_PROXY=1` behind a proxy — and never without one.** It decides what the app believes the client's address is, and the rate limits are keyed on that: ten sign-in attempts per 15 minutes, five password-reset requests an hour, ten invite or reset token uses an hour, each per address.
+**4. Configure `TRUST_PROXY` for the actual proxy boundary — and never without one.** It decides what the app believes the client's address is, and the rate limits are keyed on that: ten sign-in attempts per 15 minutes, five password-reset requests an hour, ten invite or reset token uses an hour, each per address.
 
 Behind a proxy without it, every request in the world arrives as the proxy's own address and shares one bucket — ten bad passwords from one stranger lock the whole workspace out for fifteen minutes. Set on an instance with nothing in front of it, it is worse: `X-Forwarded-For` is then a header any client writes for itself, so an attacker takes a fresh address per attempt and the limits stop existing. That is why it is off by default and per deployment.
 
-**A hop count, and not `true`, which is the value most guides print.** `true` means "trust every entry in `X-Forwarded-For`", and the app then reads the left-most one as the client — correct only for a proxy that _replaces_ the header. The nginx block below appends instead: `$proxy_add_x_forwarded_for` is "whatever arrived, plus the address I saw", so under `true` a caller who sends their own `X-Forwarded-For` names their own address, takes a fresh rate-limit bucket per request, and writes your log for you. `1` is one proxy directly in front — the address the app believes is then the one your proxy actually saw. Two proxies in a chain is `2`, and a comma-separated list of your proxies' own addresses is the precise version if you know them. This is also what decides the `ip` field in every request log line, which is the other reason to want it right.
+Use one of two supported patterns:
+
+- **Exact proxy address or CIDR.** Set `TRUST_PROXY` to the proxy IP/CIDR, or a comma-separated list, when those addresses are known and stable. This is preferred because Fastify can verify that the immediate peer belongs to the trusted boundary.
+- **Fully trusted sanitizing proxy.** `TRUST_PROXY=true` is acceptable only when the Fastify/container origin cannot be reached by untrusted clients except through that proxy, and the proxy removes or overwrites untrusted incoming `X-Forwarded-*` values before forwarding. Numeric hop counts such as `1` are rejected because they cannot validate the connecting proxy address.
+
+The production-light Compose example publishes the backend only on `127.0.0.1:3000`, so `true` is safe with the Caddy configuration below. Caddy ignores untrusted incoming `X-Forwarded-*` values by default and supplies proxy-generated values. Keep both parts of that boundary together.
 
 ## The proxy itself
 
@@ -97,7 +102,7 @@ inventory.example.com {
 }
 ```
 
-That is genuinely the whole file. Caddy obtains and renews the certificate itself, redirects `http://` to `https://`, keeps the original `Host` header, and sets `X-Forwarded-For` and `X-Forwarded-Proto` on its own — the entire contract above, by default. It has no request body limit, so a 10 MB attachment goes through untouched.
+That is genuinely the whole file. Caddy obtains and renews the certificate itself, redirects `http://` to `https://`, keeps the original `Host` header, ignores untrusted incoming forwarded values, and supplies `X-Forwarded-For` and `X-Forwarded-Proto` on its own. Together with the loopback-only backend port, that is the sanitizing-proxy boundary required for `TRUST_PROXY=true`. It has no request body limit, so a 10 MB attachment goes through untouched.
 
 ```bash
 caddy validate --config /etc/caddy/Caddyfile
@@ -152,7 +157,7 @@ server {
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
@@ -251,7 +256,7 @@ Moving an existing workspace across is an export and an import, not a migration:
 
 **Every save 403s in the browser, but curl works.** `APP_URL` is wrong. The origin guard compares the browser's `Origin` against `APP_URL`'s origin exactly; curl sends no `Origin` at all, so it sails past the same check. The 403 names the origin this instance expects — compare it with the address bar, character for character.
 
-**Ten bad logins locked everybody out.** `TRUST_PROXY` is unset behind a proxy, so every request shares the proxy's address and its bucket. Set it to `1` — one proxy in front — and restart.
+**Ten bad logins locked everybody out.** `TRUST_PROXY` is unset behind a proxy, so every request shares the proxy's address and its bucket. Set it to the proxy's IP/CIDR, or use `true` only with the loopback-only, sanitizing-proxy boundary documented above, and restart.
 
 **The container prints "The data directory … is not writable" and stops.** The mounted directory is not writable by uid 1000. `chown -R 1000:1000 /srv/inventory/data`, or take the one-run root heal the message itself prints.
 

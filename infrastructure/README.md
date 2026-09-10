@@ -215,9 +215,9 @@ domain          = "inventory.example.com"
 route53_zone_id = "Z0123456789ABCDEFGHIJ"
 ```
 
-You get an ACM certificate validated over DNS, an Application Load Balancer across both public subnets, a target group pointing at the instance's port 80, a listener on 443 with a 301 from 80, and an A alias in the zone. Three things change on the instance at the same time: it stops accepting traffic from the world (only the load balancer's security group reaches its port 80), `APP_URL` becomes `https://<domain>`, and `TRUST_PROXY=1` is written into its environment so the sign-in rate limits see the client's address rather than the balancer's.
+You get an ACM certificate validated over DNS, an Application Load Balancer across both public subnets, a target group pointing at the instance's port 80, a listener on 443 with a 301 from 80, and an A alias in the zone. Three things change on the instance at the same time: it stops accepting traffic from the world (only the load balancer's security group reaches its port 80), `APP_URL` becomes `https://<domain>`, and `TRUST_PROXY` is written as the explicit trusted CIDRs derived from the public subnet resources.
 
-That value is a hop count, and `true` would be the wrong answer to the same question. The balancer **appends** the address it saw to `X-Forwarded-For` rather than replacing the header, and `TRUST_PROXY=true` makes the app believe the left-most entry — which is whatever the caller wrote there before the balancer ever saw it. A fresh forged address per request is a fresh rate-limit bucket per request, and a log full of addresses somebody chose. `1` means one hop of trust, which is exactly the topology: the balancer, and nothing in front of it.
+Those CIDRs let Fastify verify that its immediate peer belongs to the trusted proxy boundary. The balancer **appends** the client address it saw to `X-Forwarded-For`, so Fastify stops walking the chain at the first untrusted address. Attacker-controlled values farther left do not become the client identity.
 
 Because `APP_URL` changes, **turning this on replaces the instance** — same three minutes as an upgrade.
 

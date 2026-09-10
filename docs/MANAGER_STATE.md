@@ -4,8 +4,8 @@ Status:
 ACTIVE
 
 Current phase:
-Batch 1 merge verification / closure before Batch 2 planning.
-Current gate: Batch 1 merge verification / closure before Batch 2 planning.
+Batch 2 technical implementation validated / merge verification pending.
+Current gate: Batch 2 merge verification / closure before Batch 3 planning.
 
 Experiment repository:
 r7-1505165673/hardware-assets-inventory-tool
@@ -109,11 +109,21 @@ Fork CI Gate: PASS. Verified PR #3, head 0c21949bdef40c3ced59ddc5b5c31989dc815cb
 
 Batch 1 technical implementation: VALIDATED / PASS.
 
-Current stage: Batch 1 merge verification / closure before Batch 2 planning.
+Current stage: Batch 2 technical implementation validated / merge verification pending.
 
 Fresh npm ci advisory observation: 9 vulnerabilities (7 moderate, 2 high). Dependency remediation: NOT part of this state sync.
 
 ## Batch 1 state
+
+Batch 1: CLOSED / PASS.
+
+PR: #4
+
+Authorized final head: 50630a736fddc8971a569eb17a1e58942aac539b
+
+Merge commit: d57a9a3d44bf401e186233280df32eb11531e75d
+
+Post-merge main CI: 34473410139 — PASS.
 
 Batch 1 technical implementation: VALIDATED / PASS.
 
@@ -160,9 +170,69 @@ Batch 1 technical implementation is validated. Live PR / merge status must be de
 
 If both conditions are true, Batch 1 should be treated as CLOSED / PASS without creating another state-only PR merely to flip that checkpoint.
 
-Current next stage: Batch 1 merge verification / closure before Batch 2 planning.
+Current next stage: Batch 2 merge verification / closure before Batch 3 planning.
 
-Batch 2 implementation: NOT STARTED.
+Batch 2 technical implementation: VALIDATED / PASS.
+
+## Batch 2 state
+
+Technical implementation: VALIDATED / PASS.
+
+PR: #5
+
+Reviewed final technical head: `85dc7b31c321a99d15b85122752a741ccd589981`
+
+Validated CI: `34478773533`
+
+Architectural decision:
+
+- Upgrade Fastify to 5.12.3.
+- Numeric hop-count trust removed/rejected.
+- Explicit proxy IP/CIDR trust preferred.
+- Constrained sanitizing-proxy TRUST_PROXY=true mode documented.
+- ALB trust uses Terraform-derived public-subnet CIDRs.
+
+Regression evidence:
+
+- API: 489 passed
+- Web: 329 passed
+- Shared: 166 passed
+- Total unit/integration: 984 passed
+- E2E: 49 passed
+- Config: 15 passed
+- Security: 11 passed
+
+Terraform validation:
+
+- fmt: PASS
+- init: PASS
+- validate: PASS
+
+Fastify: 5.12.0 → 5.12.3
+
+Audit: 7 vulnerabilities
+
+- 6 moderate
+- 1 high
+
+Remaining unrelated vulnerabilities: OUT OF SCOPE.
+
+AWS apply: NOT PERFORMED.
+
+Optional ALB/domain path: NOT live-applied; static Terraform validation only.
+
+Batch 3 implementation: NOT STARTED.
+
+Important recovery rule:
+
+Batch 2 technical implementation is validated. Live PR / merge status must be derived from GitHub / Git history. Before Batch 3 planning or implementation, Manager must verify:
+
+1. PR #5 was merged from the exact authorized final head.
+2. Post-merge main CI passed.
+
+If both conditions are true, treat Batch 2 as CLOSED / PASS without creating another state-only PR solely to flip the checkpoint.
+
+Current next stage: Batch 2 merge verification / closure before Batch 3 planning.
 
 ## Planned next batches
 
@@ -170,4 +240,4 @@ Batch 2 implementation: NOT STARTED.
 - Batch 2 — Fastify security/architecture compatibility challenge
 - Batch 3 — bounded cross-module product change
 
-Current gate: Batch 1 merge verification / closure before Batch 2 planning.
+Current gate: Batch 2 merge verification / closure before Batch 3 planning.

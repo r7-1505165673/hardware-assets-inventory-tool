@@ -54,15 +54,9 @@ chmod 0644 '${rds_ca_path}'
 # string and write it down. Everything else about this boot is worth having in
 # the log; a database password in a world-readable log file is not.
 #
-# TRUST_PROXY is a hop count and not `true`, which would be a hole rather than a
-# setting. Fastify resolves `request.ip` to the last address it still trusts in
-# `X-Forwarded-For`, and `true` trusts the whole header — so it lands on the
-# LEFT-most entry, the one the client wrote for itself. The load balancer
-# appends the address it saw instead of replacing the header, so that entry
-# survives: a caller sending a fresh `X-Forwarded-For` per request would get a
-# fresh sign-in rate-limit bucket every time and an address of their choosing in
-# every log line. `1` trusts exactly one hop — the balancer — so the address
-# the app believes is the one the balancer actually saw.
+# TRUST_PROXY names the ALB subnet CIDRs derived by Terraform. Numeric hop-count
+# trust cannot verify the connecting proxy address, while these CIDRs stop
+# processing the forwarded chain at the first address outside the ALB boundary.
 set +x
 db_url="$(aws ssm get-parameter --region '${region}' --name '${ssm_parameter_name}' \
   --with-decryption --query Parameter.Value --output text)"
@@ -74,8 +68,8 @@ S3_BUCKET=${s3_bucket}
 S3_REGION=${region}
 APP_URL=${app_url}
 TZ=${timezone}
-%{ if trust_proxy ~}
-TRUST_PROXY=1
+%{ if trust_proxy_value != "" ~}
+TRUST_PROXY=${trust_proxy_value}
 %{ endif ~}
 EOF
 set -x
