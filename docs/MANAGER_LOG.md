@@ -121,3 +121,90 @@ Manager documentation only.
 
 Next:
 ChatGPT Manager re-review.
+
+## Fork CI Gate — Verification Probe
+
+Batch 0: CLOSED / PASS
+
+Starting main:
+`1a1cab930de79983c054686e2c5a710062b7c163`
+
+GitHub Actions on the fork was manually enabled by the repository owner after Batch 0 closure.
+
+Purpose of this PR:
+Trigger the repository's existing `pull_request` CI.
+
+CI workflow configuration:
+Unchanged.
+
+Product code:
+Unchanged.
+
+Dependencies:
+Unchanged.
+
+Batch 1 implementation:
+NOT STARTED.
+
+CI result:
+Not claimed in this commit. The authoritative result must be read from the GitHub Actions run by ChatGPT Manager after the PR is created.
+
+Next:
+ChatGPT independently reviews the PR and its actual GitHub Actions result.
+
+## Fork CI Gate — Manager Review / Fix 01
+
+PR: #3
+
+Reviewed head:
+6ee74b65c86e8b8f42133bbbd36d6c6c6f73d524
+
+CI run:
+34456707529
+
+Manager verdict:
+FIX REQUIRED
+
+Fork Actions status:
+Successfully triggered.
+
+Blocking failure:
+Repository `format:check` failed on pre-existing `docs/MANAGER_STATE.md`.
+
+Observation from fresh `npm ci`:
+9 vulnerabilities reported (7 moderate, 2 high).
+
+Dependency remediation:
+NOT part of this fix.
+
+Product code:
+Unchanged.
+
+CI workflow:
+Unchanged.
+
+Batch 1 implementation:
+NOT STARTED.
+
+Next:
+Push fix → allow new `pull_request` CI run → ChatGPT Manager re-review.
+
+## Fork CI Gate — Manager Re-review / PASS
+
+PR: #3
+
+Prior reviewed head: 6ee74b65c86e8b8f42133bbbd36d6c6c6f73d524
+
+Fix 01 head: 0c21949bdef40c3ced59ddc5b5c31989dc815cb6
+
+Successful CI run: 34459287398
+
+Manager technical verdict: Fork CI Gate PASS
+
+All four jobs passed: ci, api-tests-postgres, image, and terraform.
+Previous format failure resolved. GitHub full format check passed.
+The local report of 520 formatting failures was not reproduced by GitHub CI; do not bulk-format unrelated files.
+Current npm advisory observation: 9 vulnerabilities (7 moderate, 2 high).
+Dependency remediation: NOT part of this fix.
+Batch 1 implementation: NOT STARTED.
+Next: ChatGPT Manager re-review of final PR #3 head before merge.
