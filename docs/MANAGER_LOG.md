@@ -440,3 +440,79 @@ NOT STARTED
 
 Next:
 Fix 01 → new pull_request CI → ChatGPT Manager re-review
+
+## Batch 2 — Manager Re-review / Technical PASS
+
+PR:
+#5
+
+Initial implementation head:
+85e80ed8c4372f8ea1a1f2bcc6ab608783c7415f
+
+Fix 01 / technically validated head:
+85dc7b31c321a99d15b85122752a741ccd589981
+
+Initial CI:
+34477055283
+
+Result:
+FIX REQUIRED
+
+Initial blockers:
+
+- Terraform fmt failure
+- stale .env.example numeric guidance
+- stale infrastructure README numeric guidance
+- proxy test proof gap
+
+Successful CI:
+34478773533
+
+Manager technical verdict:
+PASS
+
+All four jobs:
+PASS
+
+Tests:
+
+- API: 489 passed
+- Web: 329 passed
+- Shared: 166 passed
+- Total unit/integration: 984 passed
+- E2E: 49 passed
+- Config: 15 passed
+- Security: 11 passed
+
+Terraform:
+
+- fmt: PASS
+- init: PASS
+- validate: PASS
+
+Audit:
+7 vulnerabilities
+
+- 6 moderate
+- 1 high
+
+Fastify:
+5.12.3
+
+Dependency scope:
+unchanged and bounded
+
+AWS apply:
+NOT PERFORMED
+
+Optional ALB/domain path:
+NOT live-applied
+
+Merge authorization:
+PENDING final-state re-review
+
+Batch 3:
+NOT STARTED
+
+Next:
+final state-sync commit → fresh PR CI → ChatGPT Manager final exact-head re-review → merge authorization if PASS
