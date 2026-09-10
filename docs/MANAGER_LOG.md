@@ -355,3 +355,40 @@ Merge authorization: PENDING final-state re-review.
 Batch 2: NOT STARTED.
 
 Next: final PR-head CI → ChatGPT Manager final re-review → merge authorization if PASS.
+
+## Batch 2 — Fastify Security / trustProxy Architecture Compatibility
+
+Batch 1: CLOSED / PASS.
+PR: #4
+Authorized final head: 50630a736fddc8971a569eb17a1e58942aac539b
+Merge commit: d57a9a3d44bf401e186233280df32eb11531e75d
+Post-merge main CI: 34473410139 — PASS.
+
+Batch 2 implementation: IN PROGRESS.
+Manager review: PENDING.
+
+Architectural decision:
+
+- Upgrade Fastify to 5.12.3.
+- Reject numeric TRUST_PROXY hop counts.
+- Prefer address/CIDR trust.
+- Document controlled sanitizing-proxy true mode.
+- Derive ALB trusted proxy CIDRs from Terraform public subnet resources.
+- No AWS apply performed.
+
+Local validation:
+
+- npm ci: PASS.
+- API typecheck: PASS.
+- Config tests: 15 passed.
+- Proxy security assertions executed; Windows EPERM cleanup marked the file failed.
+- Lint: PASS.
+- Repository format check: local baseline mismatch persists (511 files reported).
+- Full typecheck: PASS.
+- Full tests: Web 329 passed and Shared 166 passed; API cleanup failures remain Windows EPERM.
+- Build: PASS.
+- E2E: local Windows web-server command cannot run rm.
+- Terraform CLI: unavailable locally; no apply attempted.
+- npm audit: 7 vulnerabilities (6 moderate, 1 high); no Fastify finding remains.
+
+Batch 3: NOT STARTED.

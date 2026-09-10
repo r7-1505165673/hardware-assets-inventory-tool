@@ -4,8 +4,8 @@ Status:
 ACTIVE
 
 Current phase:
-Batch 1 merge verification / closure before Batch 2 planning.
-Current gate: Batch 1 merge verification / closure before Batch 2 planning.
+Batch 2 implementation in progress / Manager review pending.
+Current gate: Batch 2 implementation in progress / Manager review pending.
 
 Experiment repository:
 r7-1505165673/hardware-assets-inventory-tool
@@ -109,11 +109,21 @@ Fork CI Gate: PASS. Verified PR #3, head 0c21949bdef40c3ced59ddc5b5c31989dc815cb
 
 Batch 1 technical implementation: VALIDATED / PASS.
 
-Current stage: Batch 1 merge verification / closure before Batch 2 planning.
+Current stage: Batch 2 implementation in progress / Manager review pending.
 
 Fresh npm ci advisory observation: 9 vulnerabilities (7 moderate, 2 high). Dependency remediation: NOT part of this state sync.
 
 ## Batch 1 state
+
+Batch 1: CLOSED / PASS.
+
+PR: #4
+
+Authorized final head: 50630a736fddc8971a569eb17a1e58942aac539b
+
+Merge commit: d57a9a3d44bf401e186233280df32eb11531e75d
+
+Post-merge main CI: 34473410139 — PASS.
 
 Batch 1 technical implementation: VALIDATED / PASS.
 
@@ -160,9 +170,26 @@ Batch 1 technical implementation is validated. Live PR / merge status must be de
 
 If both conditions are true, Batch 1 should be treated as CLOSED / PASS without creating another state-only PR merely to flip that checkpoint.
 
-Current next stage: Batch 1 merge verification / closure before Batch 2 planning.
+Current next stage: Batch 2 implementation in progress / Manager review pending.
 
-Batch 2 implementation: NOT STARTED.
+Batch 2 implementation: IN PROGRESS / Manager review pending.
+
+## Batch 2 state
+
+Implementation: IN PROGRESS.
+
+Manager review: PENDING.
+
+Architectural decision:
+
+- Upgrade Fastify to 5.12.3.
+- Remove numeric TRUST_PROXY from the application contract.
+- Prefer explicit proxy address/CIDR trust.
+- Document controlled TRUST_PROXY=true only for an unreachable origin behind a sanitizing proxy.
+- Derive ALB trusted proxy CIDRs from the public subnet resources.
+- No AWS apply performed.
+
+Batch 3 implementation: NOT STARTED.
 
 ## Planned next batches
 
@@ -170,4 +197,4 @@ Batch 2 implementation: NOT STARTED.
 - Batch 2 — Fastify security/architecture compatibility challenge
 - Batch 3 — bounded cross-module product change
 
-Current gate: Batch 1 merge verification / closure before Batch 2 planning.
+Current gate: Batch 2 implementation in progress / Manager review pending.

@@ -36,6 +36,32 @@ describe('loadConfig', () => {
     );
   });
 
+  describe('TRUST_PROXY', () => {
+    it('is false when absent, empty, or explicitly false', () => {
+      expect(loadConfig({}).trustProxy).toBe(false);
+      expect(loadConfig({ TRUST_PROXY: '' }).trustProxy).toBe(false);
+      expect(loadConfig({ TRUST_PROXY: 'false' }).trustProxy).toBe(false);
+    });
+
+    it('accepts explicit fully trusted proxy mode', () => {
+      expect(loadConfig({ TRUST_PROXY: 'true' }).trustProxy).toBe(true);
+    });
+
+    it('accepts one address or a trimmed comma-separated address list', () => {
+      expect(loadConfig({ TRUST_PROXY: '10.0.0.0/24' }).trustProxy).toEqual(['10.0.0.0/24']);
+      expect(loadConfig({ TRUST_PROXY: '10.0.0.1, 192.168.0.0/16' }).trustProxy).toEqual([
+        '10.0.0.1',
+        '192.168.0.0/16',
+      ]);
+    });
+
+    it.each(['1', '2'])('rejects numeric hop-count trust (%s)', (value) => {
+      expect(() => loadConfig({ TRUST_PROXY: value })).toThrow(
+        'TRUST_PROXY numeric hop-count trust is no longer supported; use trusted proxy IP/CIDR values instead',
+      );
+    });
+  });
+
   describe('SMTP', () => {
     it('is absent by default — an instance without email still runs', () => {
       expect(loadConfig({}).smtp).toBeNull();
