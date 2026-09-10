@@ -77,10 +77,18 @@ feature branch → commit → PR → independent ChatGPT repository/diff review 
 
 Codex must never merge on its own.
 
+## Review and CI state
+
+Initial Batch 0 Manager Review: FIX REQUIRED.
+
+This branch contains the documentation-only response to that review. PR #1 remains open; the unresolved gate is ChatGPT Manager re-review. Once Batch 0 is accepted and merged, the next stage is preparation for Batch 1. Batch 1 must not start automatically.
+
+Fork CI evidence: the experiment fork has not yet produced a GitHub Actions run or commit status for the Batch 0 PR head. No cause is inferred. Before Batch 1 implementation, fork CI behavior must be independently established, verified, or explicitly handled by the Manager as a gate.
+
 ## Planned next batches
 
 - Batch 1 — controlled fast-uri security maintenance
 - Batch 2 — Fastify security/architecture compatibility challenge
 - Batch 3 — bounded cross-module product change
 
-Next step after Batch 0: ChatGPT independently reviews the Batch 0 PR. Do not start Batch 1 automatically.
+Next step while this PR is open: ChatGPT Manager re-review of the Batch 0 Fix. After acceptance and merge: prepare for Batch 1, but do not start it automatically.

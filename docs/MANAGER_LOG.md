@@ -33,3 +33,30 @@ Current known issues:
 Decision: establish recoverable Manager state before implementation.
 
 Next step: independent ChatGPT review of the Batch 0 PR.
+
+## Batch 0 Manager Review / Fix 01
+
+Initial PR: #1
+
+Reviewed head:
+`974d31eacd18a8e3176224151bf73f34cc7ea0ef`
+
+Manager Review verdict:
+FIX REQUIRED
+
+Findings:
+
+- `MANAGER_STATE.md` next-step wording would become stale after merge.
+- The fork has no observed GitHub Actions runs or commit statuses yet.
+
+Fix scope:
+Manager documentation only.
+
+Product code changes:
+None.
+
+Decision:
+Fix on the same branch and same PR.
+
+Next:
+ChatGPT Manager re-review.
