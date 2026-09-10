@@ -4,8 +4,8 @@ Status:
 ACTIVE
 
 Current phase:
-Batch 0 completed.
-Current gate: post-Batch-0 preparation / fork CI verification before Batch 1 implementation.
+Batch 1 planning / preparation.
+Current gate: Batch 1 planning / preparation before implementation.
 
 Experiment repository:
 r7-1505165673/hardware-assets-inventory-tool
@@ -105,9 +105,11 @@ Review history:
 
 Inherited baseline evidence: the frozen upstream baseline had successful GitHub Actions CI and recorded 482 API, 329 Web, 166 Shared, 977 total unit/integration, and 49 Playwright E2E tests.
 
-Fork evidence: at the last Manager verification, the experiment fork had zero observed GitHub Actions workflow runs / commit statuses. No cause is inferred.
+Fork CI Gate: PASS. Verified PR #3, head 0c21949bdef40c3ced59ddc5b5c31989dc815cb6, GitHub Actions run 34459287398. Verified jobs: ci PASS; api-tests-postgres PASS; image PASS; terraform PASS. Main ci passed lint, repository-wide format check, typecheck, unit tests, build, Playwright browser install, and E2E.
 
-Next Manager gate: before Batch 1 implementation, independently establish, verify, or explicitly handle fork CI behavior. Batch 1 implementation has not started.
+Current stage: Batch 1 planning / preparation. Batch 1 implementation: NOT STARTED.
+
+Fresh npm ci advisory observation: 9 vulnerabilities (7 moderate, 2 high). Dependency remediation: NOT part of this state sync.
 
 ## Planned next batches
 
@@ -115,4 +117,4 @@ Next Manager gate: before Batch 1 implementation, independently establish, verif
 - Batch 2 — Fastify security/architecture compatibility challenge
 - Batch 3 — bounded cross-module product change
 
-Current gate: fork CI verification / Batch 1 preparation before Batch 1 implementation. Batch 1 implementation: NOT STARTED.
+Current gate: Batch 1 planning / preparation. Batch 1 implementation: NOT STARTED.
