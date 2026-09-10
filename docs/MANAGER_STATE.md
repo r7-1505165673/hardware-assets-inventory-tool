@@ -1,0 +1,86 @@
+# Round 2 — Existing Codebase Manager Experiment
+
+Status:
+ACTIVE
+
+Current phase:
+Batch 0 — Manager Baseline Persistence
+
+Experiment repository:
+r7-1505165673/hardware-assets-inventory-tool
+
+Upstream repository:
+mikhailbahdashych/hardware-assets-inventory-tool
+
+Frozen upstream baseline:
+db7e6ffccc58fe6a47aaa0cf489eeb0225f9c6bb
+
+Selection result: PASS
+
+Takeover Baseline Audit result: PASS WITH ISSUES
+
+## Product summary
+
+A self-hosted hardware inventory system for IT teams. It tracks assets, employees, ownership history, configurable statuses and workflows, roles and permissions, attachments, activity, dashboards, imports, optional email, and two-factor authentication. Demo mode uses fictional data and the application supports SQLite by default.
+
+## Architecture summary
+
+- npm workspaces monorepo
+- `apps/web`: React + Vite SPA
+- `apps/api`: Fastify API
+- `packages/shared`: shared domain vocabulary, RBAC, and Zod contracts
+- `e2e`: Playwright
+- Default local persistence: SQLite
+- PostgreSQL and S3 exist but are OUT OF SCOPE for the Round 2 experiment
+
+## Important domain invariant
+
+Who holds an asset is represented by assignments / ownership history, not by storing the holder directly on the asset.
+
+## Inherited baseline verification
+
+The frozen upstream baseline had a successful GitHub Actions CI run covering the repository's existing gates. These are inherited results from the exact baseline, not Batch 0 reruns.
+
+Known baseline test evidence:
+
+- 482 API tests passed
+- 329 Web tests passed
+- 166 Shared tests passed
+- 977 total unit/integration tests passed
+- 49 Playwright E2E tests passed
+
+## Known issues / risks
+
+- Baseline npm install/audit evidence reported 4 moderate vulnerabilities.
+- Production web build emitted a >500 kB chunk warning.
+- Upstream has dependency-security follow-ups after the frozen baseline.
+- Upstream fast-uri security update PR #42 is known to have green CI.
+- Upstream Fastify 5.12.1 security update PR #43 is known to fail API typecheck.
+- That Fastify failure intersects with the existing `trustProxy` security design and is not a blind dependency bump.
+- Main branch protection is not relied upon as the experiment control; process discipline is mandatory.
+
+## Experimental confound
+
+The upstream repository contains extensive `CLAUDE.md` and agent-oriented engineering instructions. Round 2 deliberately keeps them as part of the existing codebase; ChatGPT Manager must still make independent decisions before delegating execution.
+
+## Round 2 scope boundaries
+
+Allowed: local development, fictional demo data, SQLite, and bounded source/test/doc changes approved by Manager.
+
+Not allowed: production systems, real user or company asset data, real credentials or secrets, payment systems, AWS apply, Terraform deployment, production PostgreSQL, production S3, real SMTP, or unrelated repositories.
+
+## Governance
+
+Every implementation change follows:
+
+feature branch → commit → PR → independent ChatGPT repository/diff review → PASS or FIX REQUIRED → re-review if fixed → explicit merge authorization.
+
+Codex must never merge on its own.
+
+## Planned next batches
+
+- Batch 1 — controlled fast-uri security maintenance
+- Batch 2 — Fastify security/architecture compatibility challenge
+- Batch 3 — bounded cross-module product change
+
+Next step after Batch 0: ChatGPT independently reviews the Batch 0 PR. Do not start Batch 1 automatically.
