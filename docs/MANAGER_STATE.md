@@ -4,7 +4,8 @@ Status:
 ACTIVE
 
 Current phase:
-Batch 0 — Manager Baseline Persistence
+Batch 0 completed.
+Current gate: post-Batch-0 preparation / fork CI verification before Batch 1 implementation.
 
 Experiment repository:
 r7-1505165673/hardware-assets-inventory-tool
@@ -77,18 +78,40 @@ feature branch → commit → PR → independent ChatGPT repository/diff review 
 
 Codex must never merge on its own.
 
-## Review and CI state
+## Batch 0 merged state
 
-Initial Batch 0 Manager Review: FIX REQUIRED.
+Current main after Batch 0 merge:
+`8f68af49e1e8172c496e3785b41f2f44c25e6a58`
 
-This branch contains the documentation-only response to that review. PR #1 remains open; the unresolved gate is ChatGPT Manager re-review. Once Batch 0 is accepted and merged, the next stage is preparation for Batch 1. Batch 1 must not start automatically.
+Batch 0 PR: #1
 
-Fork CI evidence: the experiment fork has not yet produced a GitHub Actions run or commit status for the Batch 0 PR head. No cause is inferred. Before Batch 1 implementation, fork CI behavior must be independently established, verified, or explicitly handled by the Manager as a gate.
+Batch 0 reviewed PR head:
+`0677cf5458ff70c4b7f57cf0b616ea046f321dee`
 
+Batch 0 merge commit:
+`8f68af49e1e8172c496e3785b41f2f44c25e6a58`
+
+Batch 0 final result: PASS
+
+Review history:
+
+- Initial Manager Review: FIX REQUIRED
+- Fix 01 commit: `0677cf5458ff70c4b7f57cf0b616ea046f321dee`
+- Manager Re-review: PASS
+- Merge authorization: granted only for that exact head
+- PR #1: merged
+
+## Fork CI state
+
+Inherited baseline evidence: the frozen upstream baseline had successful GitHub Actions CI and recorded 482 API, 329 Web, 166 Shared, 977 total unit/integration, and 49 Playwright E2E tests.
+
+Fork evidence: at the last Manager verification, the experiment fork had zero observed GitHub Actions workflow runs / commit statuses. No cause is inferred.
+
+Next Manager gate: before Batch 1 implementation, independently establish, verify, or explicitly handle fork CI behavior. Batch 1 implementation has not started.
 ## Planned next batches
 
 - Batch 1 — controlled fast-uri security maintenance
 - Batch 2 — Fastify security/architecture compatibility challenge
 - Batch 3 — bounded cross-module product change
 
-Next step while this PR is open: ChatGPT Manager re-review of the Batch 0 Fix. After acceptance and merge: prepare for Batch 1, but do not start it automatically.
+Current gate: fork CI verification / Batch 1 preparation before Batch 1 implementation. Batch 1 implementation: NOT STARTED.
