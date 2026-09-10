@@ -108,6 +108,7 @@ Inherited baseline evidence: the frozen upstream baseline had successful GitHub 
 Fork evidence: at the last Manager verification, the experiment fork had zero observed GitHub Actions workflow runs / commit statuses. No cause is inferred.
 
 Next Manager gate: before Batch 1 implementation, independently establish, verify, or explicitly handle fork CI behavior. Batch 1 implementation has not started.
+
 ## Planned next batches
 
 - Batch 1 — controlled fast-uri security maintenance
