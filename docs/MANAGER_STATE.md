@@ -4,8 +4,8 @@ Status:
 ACTIVE
 
 Current phase:
-Batch 1 planning / preparation.
-Current gate: Batch 1 planning / preparation before implementation.
+Batch 1 merge verification / closure before Batch 2 planning.
+Current gate: Batch 1 merge verification / closure before Batch 2 planning.
 
 Experiment repository:
 r7-1505165673/hardware-assets-inventory-tool
@@ -107,9 +107,62 @@ Inherited baseline evidence: the frozen upstream baseline had successful GitHub 
 
 Fork CI Gate: PASS. Verified PR #3, head 0c21949bdef40c3ced59ddc5b5c31989dc815cb6, GitHub Actions run 34459287398. Verified jobs: ci PASS; api-tests-postgres PASS; image PASS; terraform PASS. Main ci passed lint, repository-wide format check, typecheck, unit tests, build, Playwright browser install, and E2E.
 
-Current stage: Batch 1 planning / preparation. Batch 1 implementation: NOT STARTED.
+Batch 1 technical implementation: VALIDATED / PASS.
+
+Current stage: Batch 1 merge verification / closure before Batch 2 planning.
 
 Fresh npm ci advisory observation: 9 vulnerabilities (7 moderate, 2 high). Dependency remediation: NOT part of this state sync.
+
+## Batch 1 state
+
+Batch 1 technical implementation: VALIDATED / PASS.
+
+PR: #4
+
+Reviewed implementation head: e329cf149c2dae74e752f7c60abae7797cba505e
+
+Validated CI run: 34469480917
+
+Validated dependency change:
+
+- fast-uri 3.1.5 → 3.1.7
+- fast-uri 4.1.2 → 4.1.4
+
+Dependency type: transitive / indirect
+
+Validated GitHub CI:
+
+- ci PASS
+- api-tests-postgres PASS
+- image PASS
+- terraform PASS
+
+Regression evidence:
+
+- API tests: 482 passed
+- Web tests: 329 passed
+- Shared tests: 166 passed
+- Total unit/integration: 977 passed
+- Playwright E2E: 49 passed
+
+Current audit observation: 8 vulnerabilities
+
+- 7 moderate
+- 1 high
+
+Remaining unrelated vulnerability remediation: OUT OF SCOPE for Batch 1.
+
+Important recovery rule:
+Batch 1 technical implementation is validated. Live PR / merge status must be derived from GitHub / Git history. Before Batch 2 implementation, Manager must verify:
+
+1. PR #4 was merged from the authorized final head.
+2. Post-merge main CI passed.
+
+If both conditions are true, Batch 1 should be treated as CLOSED / PASS without creating another state-only PR merely to flip that checkpoint.
+
+Current next stage: Batch 1 merge verification / closure before Batch 2 planning.
+
+Batch 2 implementation: NOT STARTED.
 
 ## Planned next batches
 
@@ -117,4 +170,4 @@ Fresh npm ci advisory observation: 9 vulnerabilities (7 moderate, 2 high). Depen
 - Batch 2 — Fastify security/architecture compatibility challenge
 - Batch 3 — bounded cross-module product change
 
-Current gate: Batch 1 planning / preparation. Batch 1 implementation: NOT STARTED.
+Current gate: Batch 1 merge verification / closure before Batch 2 planning.
